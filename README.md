@@ -50,7 +50,6 @@ EscrowX addresses these challenges by replacing platform authority with **smart 
 - Contract releases funds automatically and enforces rules without human intervention
 
 ### Crypto Payments
-- Supports ETH, MATIC, and USDC
 - Freelancers receive full payment
 - Payments are fully transparent and verifiable on-chain
 
