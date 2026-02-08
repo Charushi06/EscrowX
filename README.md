@@ -107,9 +107,8 @@ The technical approach of EscrowX focuses on trustless, decentralized, and trans
    - On-chain ratings and reviews are stored for completed services.  
    - Builds long-term credibility for freelancers.  
 
-6. **Decentralized Dispute Resolution**  
-   - Disputes are handled via a decentralized voting mechanism.  
-   - Validators reach consensus and enforce fair fund release.  
+6. **Decentralized Negotiations**  
+   - Negiotions are handled via a chat between client and provider. 
 
 ---
 
@@ -135,7 +134,7 @@ The core workflow of EscrowX is as follows:
 5. **Transparency**: All transactions and fund releases are recorded on-chain for verification and auditability.  
 
 
-**Competitive Advantage
+**Competitive Advantage/Platform Comparison 
 
 | Feature         | Traditional Platforms | EscrowX        |
 | --------------- | --------------------- | -------------- |
@@ -146,17 +145,6 @@ The core workflow of EscrowX is as follows:
 | Account System  | Email/Password        | Wallet         |
 | Ownership       | Platform              | Users          |
 
-
-
-**Platform Comparison
-
-| Aspect          | Traditional Platforms | EscrowX            |
-| --------------- | --------------------- | ------------------ |
-| Fees            | High commissions      | Zero platform fees |
-| Payment Control | Centralized           | Smart contracts    |
-| Trust           | Platform authority    | Verifiable code    |
-| Transparency    | Limited               | Fully on-chain     |
-| User Access     | Email & password      | Wallet-based       |
 
 ## Project Status
 
