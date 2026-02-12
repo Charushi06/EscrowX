@@ -7,11 +7,10 @@ import { Button } from '@/components/ui/Button';
 import { motion } from 'framer-motion';
 import { Search, Filter, Clock, Star, Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/Input';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useWriteContract, useWaitForTransactionReceipt, useAccount } from 'wagmi';
 import { parseEther } from 'viem';
 import { escrowXContractConfig } from '@/lib/contract';
-import { useRouter } from 'next/navigation';
 
 // Mock Data (In a real app, fetch from The Graph or contract events)
 const jobs = [
@@ -48,7 +47,7 @@ export default function JobsPage() {
     const [searchTerm, setSearchTerm] = useState('');
     const [purchasingId, setPurchasingId] = useState<number | null>(null);
     const { isConnected } = useAccount();
-    const router = useRouter();
+    const [profile, setProfile] = useState<any | null>(null);
 
     const {
         writeContract,
@@ -89,6 +88,29 @@ export default function JobsPage() {
         job.description.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    const SKILLS = ['Solidity','React','Next.js','Wagmi','Viem','The Graph','Design','Testing','Security','AI/ML','Rust'];
+    function extractSkills(text: string) {
+        const lower = text.toLowerCase();
+        return SKILLS.filter(s => lower.includes(s.toLowerCase()));
+    }
+    function matchScore(job: typeof jobs[0], prof: any): number {
+        const jobSkills = extractSkills(job.description + ' ' + job.title);
+        const profSkills = prof?.skills || [];
+        const overlap = jobSkills.filter((s) => profSkills.includes(s)).length;
+        const skillScore = Math.round((overlap / Math.max(1, profSkills.length)) * 80);
+        const rate = parseFloat(prof?.hourlyRate || '0');
+        const budget = parseFloat(job.price);
+        const budgetFit = rate ? (rate <= budget * 1000 ? 20 : 5) : 10; // rough heuristic
+        return Math.min(100, skillScore + budgetFit);
+    }
+
+    useEffect(() => {
+        try {
+            const p = localStorage.getItem('profile_published');
+            if (p) setProfile(JSON.parse(p));
+        } catch {}
+    }, []);
+
     return (
         <div className="min-h-screen flex flex-col relative">
             <div className="absolute top-0 left-0 right-0 h-[500px] bg-accent/5 blur-[100px] pointer-events-none" />
@@ -125,8 +147,34 @@ export default function JobsPage() {
                             <Filter className="w-4 h-4 mr-2" />
                             Filter
                         </Button>
+                        <a href="/profile">
+                            <Button className="bg-primary text-white hover:bg-primary/90">
+                                Add Profile
+                            </Button>
+                        </a>
                     </motion.div>
                 </div>
+
+                {profile && (
+                    <div className="mb-8">
+                        <h3 className="text-xl font-bold mb-3">Recommended for You</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {filteredJobs
+                                .map((j) => ({ j, score: matchScore(j, profile) }))
+                                .filter(({ score }) => score >= 80)
+                                .slice(0, 3)
+                                .map(({ j, score }) => (
+                                    <Card key={`rec-${j.id}`} className="p-4">
+                                        <div className="flex items-center justify-between">
+                                            <div className="font-semibold">{j.title}</div>
+                                            <div className="text-sm font-bold">{score}% match</div>
+                                        </div>
+                                        <p className="text-xs text-muted-foreground mt-2 line-clamp-2">{j.description}</p>
+                                    </Card>
+                                ))}
+                        </div>
+                    </div>
+                )}
 
                 {writeError && (
                     <div className="mb-8 p-3 bg-yellow-500/10 border border-yellow-500/20 text-yellow-200 rounded-lg text-sm text-center max-w-md mx-auto">

@@ -11,7 +11,6 @@ import { useState } from 'react';
 import { useWriteContract, useWaitForTransactionReceipt, useAccount } from 'wagmi';
 import { parseEther } from 'viem';
 import { escrowXContractConfig } from '@/lib/contract';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 // Mock Data (Same as Jobs Page but reframed as Talent)
@@ -158,6 +157,11 @@ export default function TalentPage() {
                             <Filter className="w-4 h-4 mr-2" />
                             Filter
                         </Button>
+                        <Link href="/post-job">
+                            <Button className="bg-primary text-white hover:bg-primary/90">
+                                Post a Job
+                            </Button>
+                        </Link>
                     </motion.div>
                 </div>
 
